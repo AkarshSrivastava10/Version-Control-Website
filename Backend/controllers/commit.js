@@ -4,7 +4,7 @@ const uuid=require("uuid").v4;
 
 async function commitRepo(message){
     let repoPath=path.resolve(process.cwd() , ".myGit");
-    let commitPath=path.join(repoPath , "commit");
+    let commitPath=path.join(repoPath , "commits");
     let stagingPath=path.join(repoPath , "staging");
     try{
         let commitId=uuid();
