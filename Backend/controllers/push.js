@@ -1,8 +1,13 @@
 const fs = require("fs").promises;
 const path = require("path");
 const {gc , bucketNameStr , GCS_BUCKET} = require("../config/google-cloud-config"); 
+// const mongoose=require("mongoose");
+// const User=require("../models/userModel");
+// const Repository=require("../models/repoModel");
+// const mongoose=require('mongoose');
+ 
 
-async function pushRepo(){
+async function pushRepo(userId , repoId){
   let repoPath = path.resolve(process.cwd() , ".myGit");
   let commitsPath=path.join(repoPath , "commits");
   try{
@@ -14,22 +19,15 @@ async function pushRepo(){
       for(let j=0;j<files.length;j+=1){
         
         let filePath=path.join(commitDirPath , files[j]);
-        
-        // const params = {                         //AWS
-        //   // Bucket:bucketNameStr,
-        //   // Key:`commits/${}`,
-        //   // Body:fileContent
-        // };
 
         await GCS_BUCKET.upload(filePath,{
-          destination:`commits/${commitDirs[i]}/${files[j]}`
-        })
-
-        
-        // await s3.upload(params).promises;               //AWS
+          destination:`commits/${userId}/${repoId}/${commitDirs[i]}/${files[j]}`
+        });
       }
     } 
+    
     console.log("All commits pushed successfully!");
+
   }
   catch(err){
     console.log("Error while pushing : " , err);

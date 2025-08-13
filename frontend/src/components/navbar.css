@@ -1,0 +1,126 @@
+/* Base Styles (for all screen sizes, or primarily desktop) */
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; /* Vertically align items */
+    background-color: #0d1117;
+    padding: 0.5rem 1rem; /* Adjusted: Reduced vertical padding for a shorter height */
+    margin-bottom:0; /* Remove margin-bottom as it's fixed */
+    position: fixed; /* Make the navbar fixed at the top */
+    top: 0; /* Position at the top edge */
+    left: 0; /* Position at the left edge */
+    width: 100%; /* Ensure it spans the full width of the viewport */
+    z-index: 1000; /* Ensure navbar is on top of other content */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+    height:4rem;
+}
+
+img {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out; /* Smooth transition for mobile menu */
+}
+
+.links p {
+    margin-left: 2rem;
+    margin-right: 0.5rem;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.links p:hover {
+    color: lightblue;
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo h3 {
+    margin-left: 0.5rem;
+}
+
+/* Global text color for p and h3 within divs */
+div p, h3 {
+    color: white;
+}
+
+/* Mobile Menu Button - Hidden by default on desktop */
+.mobile-menu-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: none; /* Hidden on desktop by default */
+    font-size: 1.5rem; /* Adjust icon size */
+    z-index: 1001; /* Ensure button is clickable */
+}
+
+.mobile-menu-button .icon {
+    width: 1.5rem; /* SVG icon size */
+    height: 1.5rem;
+}
+
+/* --- Responsive Styles (for screens smaller than a certain breakpoint) --- */
+@media (max-width: 768px) { /* Adjust breakpoint as needed, e.g., 768px for tablets/mobiles */
+    .navbar {
+        flex-wrap: wrap; /* Allow items to wrap to next line if needed */
+        /* No change to fixed positioning or width here */
+        height:4.5rem;
+
+    }
+
+    .mobile-menu-button {
+        display: block; /* Show hamburger button on small screens */
+    }
+
+    .links {
+        /* Mobile menu styling */
+        flex-direction: column; /* Stack links vertically */
+        position: absolute; /* Position menu absolutely below navbar */
+        top: 100%; /* Start right below the navbar */
+        left: 0;
+        width: 100%; /* Take full width */
+        background-color: black; /* Same background as navbar */
+        padding: 1rem 0; /* Vertical padding for links */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        
+        /* Hidden by default on mobile */
+        transform: translateY(-100%); /* Move off-screen upwards */
+        opacity: 0;
+        pointer-events: none; /* Prevent clicks when hidden */
+    }
+
+    .links.open {
+        /* When mobile menu is open */
+        transform: translateY(0); /* Slide into view */
+        opacity: 1;
+        pointer-events: auto; /* Allow clicks when open */
+    }
+
+    .links a {
+        width: 100%; /* Make links take full width for better tapping */
+        text-align: center;
+        padding: 0.75rem 0; /* Padding for each link item */
+    }
+
+    .links p {
+        margin: 0; /* Remove horizontal margins for vertical stacking */
+    }
+
+    .logo-link {
+        /* Ensure logo is always visible and aligned */
+        margin-right: auto; /* Push logo to the left, links to the right */
+    }
+}

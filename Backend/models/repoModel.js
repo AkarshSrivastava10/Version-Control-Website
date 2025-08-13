@@ -11,7 +11,15 @@ const repositorySchema=new mongoose.Schema({
     },
     content:[{  //Can be the list of files
         type:String,
+        default:[]
     }],
+    latestCommit:{
+        type:String
+    },
+    updatedAt: { // This field will store the last time the repository was updated
+        type: Date,
+        default: Date.now
+    },
     visibility:{
         type:Boolean,
     },

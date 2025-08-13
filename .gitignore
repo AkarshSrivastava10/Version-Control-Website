@@ -1,4 +1,9 @@
+#Backend
 Backend/.env
 Backend/node_modules
 Backend/config/
 Backend/centered-snow-466417-n7-6ccef895f5a3.json
+
+#Frontend
+frontend/.env
+frontend/node_modules

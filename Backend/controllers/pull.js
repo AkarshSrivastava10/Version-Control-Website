@@ -2,7 +2,7 @@ const fs=require("fs").promises;
 const path = require("path");
 const {bucketNameStr , GCS_BUCKET , gc}=require("../config/google-cloud-config");
 
-async function pullRepo(){
+async function pullRepo(userId , repoId , commitId){
   const repoPath=path.resolve(process.cwd() , ".myGit");
   const commitsPath=path.join(repoPath , "commits");
   try{
@@ -13,7 +13,7 @@ async function pullRepo(){
     // })
 
     const [objects] = await GCS_BUCKET.getFiles({
-      prefix:"commits/"
+      prefix:`commits/${userId}/${repoId}/${commitId}`
     })
     // console.log(objects);
 

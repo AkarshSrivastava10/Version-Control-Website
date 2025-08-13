@@ -1,4 +1,6 @@
-require('dotenv').config();
+if(process.env.NODE_ENV != "production"){
+    require('dotenv').config()
+}
 
 const yargs=require('yargs');
 const {hideBin}=require('yargs/helpers');
@@ -47,8 +49,22 @@ yargs(hideBin(process.argv))
 } , (argv)=>{
     revertRepo(argv.commitId);
 })
-.command("push" , "To push the remote repository" , {} , pushRepo)
-.command("pull" , "To pull from the remote repository" , {} , pullRepo)
+.command("push [userId] [repoId]" , "To push the remote repository" , (yargs)=>{
+    return yargs.positional("userId" , {
+        describe:"User ID , repo ID for pushing data for certain user",
+        type:'string'
+    })
+} , (argv)=>{
+    pushRepo(argv.userId , argv.repoId); 
+})
+.command("pull [userId] [repoId] [commitId]" , "To pull from the remote repository" , (yargs)=>{
+    return yargs.positional("userId" , {
+        describe:"User ID , repo ID , commit ID for pulling data for certain commit",
+        type:"string"
+    })
+} , (argv)=>{
+    pullRepo(argv.userId , argv.repoId, argv.commitId);
+})
 
 .demandCommand(1 , "You need atleast one command!").help().argv; //{} is parameter list
 

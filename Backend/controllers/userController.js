@@ -1,27 +1,13 @@
 const jwt=require('jsonwebtoken');
-const { MongoClient, ObjectId, ServerHeartbeatStartedEvent, ReturnDocument } = require('mongodb');
+const mongoose=require('mongoose');
 const bcrypt=require('bcryptjs');
-const { estimatedDocumentCount } = require('../models/userModel');
-const objectId=require('mongodb').ObjectId;
+const User = require('../models/userModel');
 require('dotenv').config();
-
-//db connection
-const uri=process.env.MONGO_URI;
-let client;
-async function connectClient(){
-    if(!client){
-        client=new MongoClient(uri);
-        await client.connect();
-    }
-}
 
 const getAllUsers=async (req,res)=>{
     try{
-        await connectClient();
-        const db=client.db('projectmygithub');
-        const userCollection=db.collection('users');
-
-        const users=await userCollection.find({}).toArray();
+        const users=await User.find();
+        console.log(users);
         res.json(users);
     }
     catch(err){
@@ -32,43 +18,36 @@ const getAllUsers=async (req,res)=>{
 const signup=async(req,res)=>{
     let {username , email , password} = req.body;
     try{
-        await connectClient(); //To connect with the mongo client 
-        const db=client.db("projectmygithub"); //To connect with the dbs 
-        const userCollection=db.collection('users'); //To go to collection name
-        const user = await userCollection.findOne({username});
+        const user = await User.findOne({email:email});
         if(user){
             return res.status(400).json({message : "User already exist!"});
         }
 
         const salt=await bcrypt.genSalt(10);
-        hashedPassword=await bcrypt.hash(password , salt);
-        const newUser={
+        let hashedPassword=await bcrypt.hash(password , salt);
+
+        const newUser=await new User({
             username,
             email,
             hashedPassword,
             repositories:[],
             followedUser:[],
-            starRepos:[], 
-        }
-
-        const result=await userCollection.insertOne(newUser);
-        const token=jwt.sign({id:result.insertId} , process.env.JWT_SECRET_KEY , {expiresIn:"1h"});
-        res.json({token});
+            starRepos:[] 
+        });
+        const result=await newUser.save();
+        const token=jwt.sign({id:result._id} , process.env.JWT_SECRET_KEY , {expiresIn:"1h"});
+        res.json({token , userId:result._id});
     }
     catch(err){
         console.error("Error during signup : " , err);
-        res.send(500).send("Server error");
+        res.status(500).send("Server error");
     }
 }
 const login=async(req,res)=>{
     const {email , password}=req.body;
     try{
-        await connectClient(); 
-        const db=client.db("projectmygithub");
-        const userCollection=db.collection("users");
 
-        const user=await userCollection.findOne({email});
-        
+        const user=await User.findOne({email});
         if(!user){
             return res.status(400).json({message : "Invalid credentials!"}); //User doesn't exists
         }
@@ -81,7 +60,7 @@ const login=async(req,res)=>{
 
         const token=jwt.sign({id:user._id} , process.env.JWT_SECRET_KEY , {expiresIn:"1h"});
 
-        res.json({token , userId : user._id});
+        res.json({token:token , userId : user._id});
     }
     catch(err){
         console.log("Error during login : " , err);
@@ -89,13 +68,11 @@ const login=async(req,res)=>{
     }
 }
 const getUserProfile=async(req,res)=>{
-    const {id} = req.params;
+    const {userId} = req.params;
     try{
-        await connectClient();
-        const db=client.db('projectmygithub');
-        const userCollection=db.collection("users");
         
-        const userData=await userCollection.findOne({_id:new ObjectId(id)}); //here string will be converted to mongo db compatible
+        const userData=await User.findOne({_id:userId}).populate("repositories"); //here string will be converted to mongo db compatible
+        
         if(!userData){
             return res.status(400).json({message : "User not found!"});
         } 
@@ -111,43 +88,33 @@ const updateUserProfile=async(req,res)=>{
     let {id}=req.params;
     let {email , password}=req.body;
     try{
-        let updateFeilds={email}; //we atleaast nedded email for any kind of updation
-        if(password){ //Checkeing if password is updated or not
-            const salt=await bcrypt.genSalt(10);
-            const hashedPassword=await bcrypt.hash(password , salt);
-            updateFeilds.password=hashedPassword;
-        }
 
-        // main
-        await connectClient();
-        const db = client.db("projectmygithub");
-        const userCollection=db.collection("users");
-        
-        const result =await userCollection.findOneAndUpdate({_id:new ObjectId(id)},{$set:updateFeilds},{returnDocument:"after"});
-        
-        if(!result){
-            return res.status(404).json({message:"User not found"});
+        const updatedFeilds={email};
+        if(password){
+            const salt=await bcrypt.genSalt(10);
+            const newPass=await bcrypt.hash(password , salt);
+            updatedFeilds.newPass=newPass;
         }
-        return res.send(result);
+        const findUser=await User.findByIdAndUpdate({_id:id} , {email:updatedFeilds.email , hashedPassword:updatedFeilds.newPass});
+        await findUser.save();
+        
+        res.status(200).json({msg : "feilds updated!"});
 
     }
     catch(err){
         console.error("Error while updating user info!" , err);
-        res.send(500).send("Something went wrong in updating user!");
+        res.status(500).send("Something went wrong in updating user!");
     }
 }
 const deleteUserProfile=async (req,res)=>{
     const {id}=req.params;
     try{
-        await connectClient();
-        const db=client.db("projectmygithub");
-        const userCollection=db.collection("users");
 
-        const result = await userCollection.deleteOne({_id:new ObjectId(id)});
+        const result = await User.findByIdAndDelete({_id:id});
         if(!result){
             return res.status(404).send("User not found!");
         }
-        res.send(`User is deleted`);
+        res.status(200).send(`User is deleted`);
     }
     catch(err){
         console.error("Error while deleting user : " , err);

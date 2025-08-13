@@ -1,0 +1,178 @@
+/* Main container for the dashboard */
+.dashboard-container-v2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the start of the cross axis */
+    padding: 20px; /* Some padding around the entire dashboard section */
+
+    /* Adjust padding-top to ensure content is not hidden by fixed navbar */
+    padding-top: calc(50px + 20px); /* Assuming navbar height is approx. 50px + 20px desired gap */
+    background-color: #010409; /* Dark background for the entire page */
+    min-height: calc(100vh - (50px + 20px)); /* Ensure content fills remaining height */
+    color: rgba(255, 255, 255, 0.87); /* Light text color */
+    box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    width: 100%; /* Ensure it takes full width */
+    height:100vh;
+}
+
+/* Styles for the individual aside and main sections */
+.dashboard-aside-v2,
+.dashboard-main-v2 {
+    background-color: #0d1117; /* Darker background for panels */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    flex: 1; /* Allows panels to grow and shrink */
+    margin: 0 10px; /* Space between panels */
+    display: flex; /* Make panels flex containers for their content */
+    flex-direction: column; /* Stack content vertically inside panels */
+}
+
+.dashboard-main-v2 {
+    flex: 2; /* Make the main content panel wider */
+}
+
+/* General styling for titles within panels */
+.card-title-v2 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+/* Styling for repository items */
+.repo-list-v2 {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 0;
+    flex-grow: 1; /* Allow list to take available height */
+}
+
+.repo-item-v2 {
+    background-color: #010409;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.repo-item-v2:last-child {
+    margin-bottom: 0;
+}
+
+.repo-item-v2:hover {
+    background-color: #2f363d;
+}
+
+.repo-link-v2 {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 12px 15px;
+}
+
+.repo-name-v2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #8cc2ff; /* Light blue for repo names */
+    margin-top: 0; /* Reset default h4 margin */
+}
+
+.repo-description-v2 {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+    margin-top: 0; /* Reset default p margin */
+    word-wrap: break-word; /* Ensure long descriptions break words */
+}
+
+/* Search input styling */
+.search-box-v2 {
+    margin-bottom: 15px;
+}
+
+.search-input-v2 {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background-color: #010409;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.search-input-v2::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.search-input-v2:focus {
+    border-color: #58a6ff;
+}
+
+.no-results-v2 {
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Event list styling */
+.event-list-v2 {
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+    margin: 0;
+}
+
+.event-item-v2 {
+    background-color: #010409;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.event-item-v2:last-child {
+    margin-bottom: 0;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) { /* Medium screens (e.g., tablets) */
+    .dashboard-container-v2 {
+        flex-direction: column; /* Stack panels vertically */
+        align-items: stretch; /* Stretch panels to full width */
+    }
+
+    .dashboard-aside-v2,
+    .dashboard-main-v2 {
+        margin: 10px 0; /* Adjust vertical margin */
+        width: auto; /* Reset width for stacking */
+        flex: none; /* Remove flex grow/shrink */
+    }
+}
+
+@media (max-width: 768px) { /* Smaller screens (e.g., mobile) */
+    .dashboard-container-v2 {
+        padding: 10px;
+        padding-top: calc(50px + 50px);
+    }
+    .dashboard-aside-v2,
+    .dashboard-main-v2 {
+        padding: 15px;
+    }
+    .card-title-v2 {
+        font-size: 1.4rem;
+    }
+    .repo-name-v2 {
+        font-size: 1rem;
+    }
+    .repo-description-v2 {
+        font-size: 0.85rem;
+    }
+}

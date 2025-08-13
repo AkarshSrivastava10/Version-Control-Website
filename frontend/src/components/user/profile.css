@@ -1,0 +1,190 @@
+/* Base Styles */
+.profile-page-container {
+    display: flex;
+    padding-top: 60px; /* Adjust based on navbar height to prevent content overlap */
+    min-height: 100vh;
+    background-color: #010409; /* A deep, dark background for a GitHub-like feel */
+    color: #c9d1d9; /* Light grey text */
+    padding-bottom: 20px;
+    overflow-x: hidden;
+}
+
+/* --- Left Sidebar --- */
+.profile-sidebar {
+    width: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid #30363d;
+    position: sticky;
+    top: 60px; /* Stick it just below the navbar */
+    height: calc(100vh - 60px); /* Fill remaining viewport height */
+}
+
+.profile-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 1px solid #30363d;
+}
+
+.name-section {
+    margin: 15px 0 10px;
+    text-align: center;
+}
+
+.username {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    color: #c9d1d9;
+}
+
+.user-bio {
+    font-size: 1rem;
+    margin: 5px 0 0;
+    color: #8b949e;
+}
+
+.follow-btn, .logout-btn {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    background-color: #21262d;
+    color: #c9d1d9;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.follow-btn:hover, .logout-btn:hover {
+    background-color: #30363d;
+    border-color: #8b949e;
+}
+
+.logout-btn {
+    margin-top: 10px; /* Create a slight separation from the follow button */
+}
+
+.follower-stats {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #30363d;
+    padding-top: 20px;
+}
+
+.follower-stats p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #8b949e;
+}
+
+.follower-stats p b {
+    color: #c9d1d9;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+/* --- Main Content Area --- */
+.profile-main-content {
+    flex-grow: 1;
+    padding: 20px 40px;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 30px 0 15px;
+    color: #c9d1d9;
+}
+
+.heatmap-placeholder {
+    width: 100%;
+    height: 150px;
+    background-color: #0d1117;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* UnderlineNav component styling */
+.profile-main-content .UnderlineNav {
+    border-bottom: 1px solid #30363d;
+    margin-bottom: 20px;
+}
+
+/* Repository List Styling */
+.repo-cards-container {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+.repo-card {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 15px;
+    transition: background-color 0.2s ease;
+}
+
+.repo-card:hover {
+    background-color: #161b22;
+}
+
+.repo-name a {
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.repo-name a:hover {
+    text-decoration: underline;
+}
+
+.repo-description {
+    font-size: 0.9rem;
+    color: #8b949e;
+    margin: 5px 0 0;
+}
+
+.no-repos-message {
+    color: #8b949e;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .profile-page-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .profile-sidebar {
+        width: 100%;
+        max-width: 600px;
+        position: relative;
+        top: 0;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #30363d;
+        padding-bottom: 30px;
+    }
+    .profile-main-content {
+        width: 100%;
+        padding: 20px;
+    }
+    .repo-cards-container {
+        grid-template-columns: 1fr;
+    }
+}

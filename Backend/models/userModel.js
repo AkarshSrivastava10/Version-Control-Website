@@ -11,7 +11,7 @@ let userSchema = new mongoose.Schema({
         required:true,
         unique:true
     },
-    password:{
+    hashedPassword:{
         type:String,
     },
     repositories:[{
@@ -24,11 +24,11 @@ let userSchema = new mongoose.Schema({
         ref:"User",
         default:[]
     }],
-    starRepos:{
+    starRepos:[{
         default:[],
         type:mongoose.Schema.Types.ObjectId,
         ref:"Repository"
-    }
+    }]
 });
 
 const User=mongoose.model("User" , userSchema);

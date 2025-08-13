@@ -19,10 +19,14 @@ async function commitRepo(message){
         await fs.writeFile(path.join(commitIdDir , "commit.json") , JSON.stringify({message ,date : new Date().toISOString()}));
 
         console.log(`Commit with id ${commitId} created with message "${message}"`);
+        // console.log(files);
+        for(i=0;i<files.length;i+=1){
+            await fs.unlink(path.join(stagingPath , files[i]));
+        }
     }
     catch(error){
         console.log("Error in commiting file : " , error);
-    }
-}
+    }}
+
 
 module.exports = ({commitRepo});
